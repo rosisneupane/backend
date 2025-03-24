@@ -7,25 +7,23 @@ from utils.security import hash_password, verify_password, create_access_token
 from utils.email_sender import send_verification_email
 from utils.otp import generate_otp
 from typing import List
+from middleware.auth_middleware import get_current_user
 
 router = APIRouter()
-
+ 
 
 
 @router.get("/users/", response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
     return db.query(User).all()
 
+@router.get("/users/me", response_model=UserResponse)
+def get_user_details(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == current_user).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
 
-@router.post("/auth/test")
-async def test_payload(user: TestPayload):
-    print("username:", user.username)
-    print("email:", user.email)
-    print("password:", user.password)
-    print("guardianEmail:", user.guardianEmail)
-    print("guardianPhone:", user.guardianPhone)
-
-    return {"message": "Payload received", "status": 200}
 
 
 @router.post("/auth/register", response_model=UserResponse)
@@ -85,7 +83,7 @@ def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    token = create_access_token(data={"sub": user.username})
+    token = create_access_token(data={"sub": user.id})
 
     print("✅ OTP verified successfully using guardian email!")
     return {"access_token": token, "token_type": "bearer"}
@@ -120,6 +118,6 @@ def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
         return {"detail": "User not verified. OTP has been sent to your email.", "email": user.email}
     
     # User is verified, issue token
-    token = create_access_token(data={"sub": user.username})
+    token = create_access_token(data={"sub": user.id})
     return {"access_token": token, "token_type": "bearer"}
 
