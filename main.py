@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from controllers.auth_controller import router as auth_router
 from controllers.routine_controller import router as routine_router
+from controllers.mood_controller import router as mood_router
 from database.database import Base, engine
 
 
@@ -19,3 +20,4 @@ def read_item(item_id: int, q: str = None):
 
 app.include_router(auth_router)
 app.include_router(routine_router)
+app.include_router(mood_router)
