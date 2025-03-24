@@ -17,6 +17,8 @@ class User(Base):
     hashed_password = Column(String)
 
     routines = relationship("Routine", back_populates="user")
+    moods = relationship("Mood", back_populates="user")
+
 
 class Routine(Base):
     __tablename__ = "routines"
