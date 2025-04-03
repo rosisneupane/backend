@@ -11,6 +11,7 @@ class UserResponse(BaseModel):
     guardianPhone: str
     is_verified: bool
     verification_otp:Optional[str]
+    is_admin:bool
 
 
 

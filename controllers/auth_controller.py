@@ -9,7 +9,7 @@ from utils.otp import generate_otp
 from typing import List
 from middleware.auth_middleware import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["Auth"])
  
 
 

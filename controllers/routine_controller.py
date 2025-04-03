@@ -6,7 +6,7 @@ from schemas.routine_schema import RoutineCreate, RoutineResponse
 from middleware.auth_middleware import get_current_user
 import uuid
 
-router = APIRouter()
+router = APIRouter(prefix="/routines", tags=["Routines"])
 
 @router.post("/routines", response_model=RoutineResponse)
 def create_routine(

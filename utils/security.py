@@ -42,3 +42,23 @@ def decode_access_token(token: str):
         return payload
     except JWTError:
         return None
+    
+
+def decode_access_token_admin(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        
+        # Convert 'sub' field back to UUID if applicable
+        if "sub" in payload:
+            try:
+                payload["sub"] = UUID(payload["sub"])
+            except ValueError:
+                return None  # Invalid UUID format
+        
+        # Ensure 'is_admin' is present and True
+        if not payload.get("is_admin", False):
+            return None
+        
+        return payload
+    except JWTError:
+        return None
