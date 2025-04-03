@@ -9,8 +9,8 @@ from typing import List
 from datetime import date
 from uuid import UUID
 
-router = APIRouter()
 
+router = APIRouter(prefix="/mood", tags=["Mood"])
 # Create a new mood
 @router.post("/mood", response_model=MoodResponse)
 def create_mood(mood: MoodCreate, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Videos</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            text-decoration: none;
+            color: black;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Admin Panel</h3>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/users">Users</a>
+    <a href="/admin/videos">Videos</a>
+</div>
+
+<div class="content">
+    <h2>Videos List</h2>
+    <ul>
+        {% for video in videos %}
+            <li>{{ video }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
