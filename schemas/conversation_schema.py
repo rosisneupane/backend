@@ -8,6 +8,9 @@ class ConversationCreate(BaseModel):
     details: Optional[str] = None
     user_ids: List[UUID]  # List of user IDs to be added to the conversation
 
+class ConversationJoin(BaseModel):
+    conversation_id: UUID
+
 class ConversationResponse(BaseModel):
     id: UUID
     name: str

@@ -13,20 +13,20 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
  
 
 
-@router.get("/users/", response_model=List[UserResponse])
-def get_users(db: Session = Depends(get_db)):
-    return db.query(User).all()
+# @router.get("/users/", response_model=List[UserResponse])
+# def get_users(db: Session = Depends(get_db)):
+#     return db.query(User).all()
 
-@router.get("/users/me", response_model=UserResponse)
-def get_user_details(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == current_user).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+# @router.get("/users/me", response_model=UserResponse)
+# def get_user_details(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
+#     user = db.query(User).filter(User.id == current_user).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="User not found")
+#     return user
 
 
 
-@router.post("/auth/register", response_model=UserResponse)
+@router.post("/register", response_model=UserResponse)
 def register_user(user: RegisterRequest, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
@@ -56,7 +56,7 @@ def register_user(user: RegisterRequest, db: Session = Depends(get_db)):
 
 
 
-@router.post("/auth/verify-otp", response_model=TokenResponse)
+@router.post("/verify-otp", response_model=TokenResponse)
 def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
     print(f"🔹 Verifying OTP for guardian email: {payload.email}")
 
@@ -90,7 +90,7 @@ def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
 
 
 
-# @router.post("/auth/login", response_model=TokenResponse)
+# @router.post("/login", response_model=TokenResponse)
 # def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
 #     user = db.query(User).filter(User.username == credentials.username).first()
 #     if not user or not verify_password(credentials.password, user.hashed_password):
@@ -99,7 +99,7 @@ def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
 #     token = create_access_token(data={"sub": user.username})
 #     return {"access_token": token, "token_type": "bearer"}
 
-@router.post("/auth/login", response_model=TokenResponse)
+@router.post("/login", response_model=TokenResponse)
 def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == credentials.email).first()
     
