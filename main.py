@@ -4,6 +4,8 @@ from controllers.routine_controller import router as routine_router
 from controllers.mood_controller import router as mood_router
 from controllers.admin_controller import router as admin_router
 from controllers.conversation_controller import router as conversation_router
+from controllers.message_controller import router as message_router
+from controllers.user_controller import router as user_router
 from database.database import Base, engine
 
 
@@ -21,7 +23,9 @@ def read_item(item_id: int, q: str = None):
     return {"item_id": item_id, "query": q}
 
 app.include_router(auth_router)
+app.include_router(user_router)
 app.include_router(routine_router)
 app.include_router(mood_router)
 app.include_router(conversation_router)
-app.include_router(admin_router, prefix="/admin")  # Admin route
+app.include_router(message_router)
+app.include_router(admin_router)  # Admin route

@@ -8,7 +8,7 @@ import uuid
 
 router = APIRouter(prefix="/routines", tags=["Routines"])
 
-@router.post("/routines", response_model=RoutineResponse)
+@router.post("/", response_model=RoutineResponse)
 def create_routine(
     routine_data: RoutineCreate,
     db: Session = Depends(get_db),
@@ -27,7 +27,7 @@ def create_routine(
     db.refresh(routine)
     return routine
 
-@router.get("/routines", response_model=list[RoutineResponse])
+@router.get("/", response_model=list[RoutineResponse])
 def get_routines(
     db: Session = Depends(get_db),
     current_user: str = Depends(get_current_user)
@@ -35,7 +35,7 @@ def get_routines(
     routines = db.query(Routine).filter(Routine.user_id == current_user).all()
     return routines
 
-@router.get("/routines/{routine_id}", response_model=RoutineResponse)
+@router.get("/{routine_id}", response_model=RoutineResponse)
 def get_routine(
     routine_id: uuid.UUID,
     db: Session = Depends(get_db),
@@ -46,7 +46,7 @@ def get_routine(
         raise HTTPException(status_code=404, detail="Routine not found")
     return routine
 
-@router.put("/routines/{routine_id}", response_model=RoutineResponse)
+@router.put("/{routine_id}", response_model=RoutineResponse)
 def update_routine(
     routine_id: uuid.UUID,
     routine_data: RoutineCreate,
@@ -66,7 +66,7 @@ def update_routine(
     db.refresh(routine)
     return routine
 
-@router.delete("/routines/{routine_id}")
+@router.delete("/{routine_id}")
 def delete_routine(
     routine_id: uuid.UUID,
     db: Session = Depends(get_db),

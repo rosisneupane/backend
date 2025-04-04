@@ -12,7 +12,7 @@ from uuid import UUID
 
 router = APIRouter(prefix="/mood", tags=["Mood"])
 # Create a new mood
-@router.post("/mood", response_model=MoodResponse)
+@router.post("/", response_model=MoodResponse)
 def create_mood(mood: MoodCreate, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     # Check if mood already exists for the day
     existing_mood = db.query(Mood).filter(
@@ -34,12 +34,12 @@ def create_mood(mood: MoodCreate, current_user: str = Depends(get_current_user),
     return new_mood
 
 # Get all moods for the current user
-@router.get("/mood", response_model=List[MoodResponse])
+@router.get("/", response_model=List[MoodResponse])
 def get_all_moods(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     moods = db.query(Mood).filter(Mood.user_id == current_user).order_by(Mood.date.desc()).all()
     return moods
 
-@router.delete("/mood/{mood_id}", status_code=200)
+@router.delete("/{mood_id}", status_code=200)
 def delete_mood(mood_id: str, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     try:
         # Convert mood_id to UUID
@@ -58,7 +58,7 @@ def delete_mood(mood_id: str, current_user: str = Depends(get_current_user), db:
     return {"detail": "Mood deleted successfully"}
 
 
-@router.get("/mood/today/exist", response_model=bool)
+@router.get("/today/exist", response_model=bool)
 def check_today_mood(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     # Query for today's mood
     exists = db.query(Mood).filter(
