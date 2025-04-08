@@ -1,17 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
+from schemas.user_schema import UserResponse
 
 
-class UserResponse(BaseModel):
-    id: UUID
-    username: str
-    email: str
-    guardianEmail: str
-    guardianPhone: str
-    is_verified: bool
-    verification_otp:Optional[str]
-    is_admin:bool
 
 
 
@@ -35,6 +27,8 @@ class LoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str
+    user: UserResponse
+
 
 class OTPVerificationRequest(BaseModel):
     email: str
