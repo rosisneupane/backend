@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException,Request
 from sqlalchemy.orm import Session
-from schemas.auth_schema import RegisterRequest, LoginRequest, TokenResponse,UserResponse,OTPVerificationRequest,TestPayload
+from schemas.auth_schema import RegisterRequest, LoginRequest, TokenResponse,OTPVerificationRequest,TestPayload
+from schemas.user_schema import UserResponse
 from models.user_model import User
 from database.database import get_db
 from utils.security import hash_password, verify_password, create_access_token
@@ -86,7 +87,13 @@ def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
     token = create_access_token(data={"sub": user.id})
 
     print("✅ OTP verified successfully using guardian email!")
-    return {"access_token": token, "token_type": "bearer"}
+    user_response = UserResponse(id=user.id, username=user.username, email=user.email)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": user_response
+    }
 
 
 
@@ -119,5 +126,11 @@ def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
     
     # User is verified, issue token
     token = create_access_token(data={"sub": user.id})
-    return {"access_token": token, "token_type": "bearer"}
+    user_response = UserResponse(id=user.id, username=user.username, email=user.email)
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": user_response
+    }
 
