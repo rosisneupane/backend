@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Videos</title>
+    <title>Admin - Collections & Videos</title>
     <style>
         body {
             display: flex;
@@ -48,23 +48,32 @@
             color: #222;
         }
 
-        .user-card {
+        .collection-card {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 15px;
-            max-width: 500px;
+            margin-bottom: 25px;
+            max-width: 600px;
         }
 
-        .user-card p {
-            margin: 6px 0;
-            color: #444;
-        }
-
-        .user-card span {
-            font-weight: bold;
+        .collection-card h3 {
+            margin: 0 0 10px 0;
             color: #222;
+        }
+
+        .collection-card p {
+            margin: 0 0 10px 0;
+            color: #555;
+        }
+
+        .video-list {
+            margin-left: 20px;
+        }
+
+        .video-list li {
+            margin: 6px 0;
+            color: #333;
         }
     </style>
 </head>
@@ -78,12 +87,64 @@
 </div>
 
 <div class="content">
-    <h2>Videos List</h2>
-    <ul>
-        {% for video in videos %}
-            <li>{{ video }}</li>
-        {% endfor %}
-    </ul>
+    <div class="content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Collections & Videos</h2>
+            <a href="/admin/collections/add" style="
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+                transition: background-color 0.2s;
+            " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+                + Add Collection
+            </a>
+        </div>
+    
+    {% for collection in collections %}
+        <div class="collection-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3>{{ collection.name }}</h3>
+                <div>
+                    <a href="/admin/videos/add?collection_id={{ collection.id }}" style="padding: 6px 12px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; margin-right: 10px;">+ Add Video</a>
+                    <form method="post" action="/collections/delete/{{ collection.id }}" style="display:inline;" onsubmit="return confirm('Delete this collection and all its videos?')">
+                        <button type="submit" style="padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 6px; font-size: 14px;">Delete Collection</button>
+                    </form>
+                </div>
+                <a href="/admin/videos/add?collection_id={{ collection.id }}" style="
+                    padding: 6px 12px;
+                    background-color: #007BFF;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-size: 14px;
+                " onmouseover="this.style.backgroundColor='#0069d9'" onmouseout="this.style.backgroundColor='#007BFF'">
+                    + Add Video
+                </a>
+            </div>
+            <p>{{ collection.description }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                {% for video in collection.videos %}
+                    <div class="user-card" style="width: 320px;">
+                        <video width="100%" height="180" controls style="border-radius: 8px;">
+                            <source src="{{ video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <p><span>Title:</span> {{ video.title }}</p>
+                        <form method="post" action="/videos/delete/{{ video.id }}" onsubmit="return confirm('Delete this video?')">
+                            <button type="submit" style="margin-top: 10px; padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                Delete Video
+                            </button>
+                        </form>
+                        
+                    </div>
+                {% endfor %}
+            </div>
+            
+        </div>
+    {% endfor %}
 </div>
 
 </body>
