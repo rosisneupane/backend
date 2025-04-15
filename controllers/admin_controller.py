@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Request, Form, Depends
+from fastapi import APIRouter, Request, Form, Depends,Query
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from database.database import get_db
 from models.user_model import User
+from models.video_model import Collection,Video
 from starlette.status import HTTP_302_FOUND
 from fastapi.templating import Jinja2Templates
 from utils.security import verify_password, create_access_token
 from middleware.auth_middleware import get_current_user,get_current_user_admin
 from schemas.auth_schema import UserResponse
+from uuid import UUID
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 templates = Jinja2Templates(directory="templates")  # Ensure you have a 'templates' folder
@@ -53,6 +55,19 @@ async def admin_users(request: Request, db: Session = Depends(get_db)):
 
 # Videos Page Route
 @router.get("/videos", response_class=HTMLResponse)
-async def admin_videos(request: Request):
-    videos = ["Video 1", "Video 2", "Video 3"]  # Static videos
-    return templates.TemplateResponse("admin_videos.html", {"request": request, "videos": videos})
+async def admin_videos(request: Request, db: Session = Depends(get_db)):
+    collections = db.query(Collection).all()
+    return templates.TemplateResponse("admin_videos.html", {
+        "request": request,
+        "collections": collections
+    })
+
+@router.get("/collections/add", response_class=HTMLResponse)
+async def add_collection_form(request: Request):
+    return templates.TemplateResponse("add_collection.html", {"request": request})
+
+@router.get("/videos/add", response_class=HTMLResponse)
+async def add_video_form(request: Request, collection_id: UUID = Query(None)):
+    return templates.TemplateResponse("add_video.html", {"request": request, "collection_id": collection_id})
+
+
