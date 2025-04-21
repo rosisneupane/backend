@@ -1,11 +1,11 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    MY_EMAIL:str
-    MY_PASSWORD:str
+    MY_EMAIL: str
+    MY_PASSWORD: str
+    OPENAI_KEY: str
 
     class Config:
-        env_file = ".env"  # Load from .env file
+        env_file = ".env"
 
-# Create a singleton instance
-# settings = Settings()
+settings = Settings()
