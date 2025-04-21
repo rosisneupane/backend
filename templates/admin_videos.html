@@ -108,7 +108,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3>{{ collection.name }}</h3>
                 <div>
-                    <a href="/admin/videos/add?collection_id={{ collection.id }}" style="padding: 6px 12px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; margin-right: 10px;">+ Add Video</a>
+                    
                     <form method="post" action="/collections/delete/{{ collection.id }}" style="display:inline;" onsubmit="return confirm('Delete this collection and all its videos?')">
                         <button type="submit" style="padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 6px; font-size: 14px;">Delete Collection</button>
                     </form>

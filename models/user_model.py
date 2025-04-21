@@ -24,6 +24,7 @@ class User(Base):
     moods = relationship("Mood", back_populates="user")
     conversations = relationship("Conversation", secondary=conversation_users, back_populates="users")
     messages_sent = relationship("Message", back_populates="sender")
+    ai_conversations = relationship("AiConversation", back_populates="user")
 
 
 

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException,Request,Form
 from sqlalchemy.orm import Session
 from typing import List
 from uuid import UUID
-from schemas.video_schema import CollectionMain,CollectionCreate,CollectionUpdate
+from schemas.video_schema import CollectionMain,CollectionUpdate
 from models.video_model import Collection
 from database.database import get_db
 from middleware.auth_middleware import get_current_user
@@ -12,7 +12,7 @@ from starlette import status
 router = APIRouter(prefix="/collections", tags=["Collections"])
 
 @router.post("/")
-def create_collection(request: Request,name: str = Form(...),description: str = Form(None),db: Session = Depends(get_db),current_user: str = Depends(get_current_user)):
+def create_collection(request: Request,name: str = Form(...),description: str = Form(None),db: Session = Depends(get_db)):
     new_collection = Collection(name=name, description=description)
     db.add(new_collection)
     db.commit()

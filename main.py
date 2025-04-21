@@ -4,6 +4,7 @@ from controllers.routine_controller import router as routine_router
 from controllers.mood_controller import router as mood_router
 from controllers.admin_controller import router as admin_router
 from controllers.conversation_controller import router as conversation_router
+from controllers.ai_conversation_controller import router as ai_conversation_router
 from controllers.message_controller import router as message_router
 from controllers.user_controller import router as user_router
 from controllers.video_controller import router as video_router
@@ -39,6 +40,7 @@ app.include_router(user_router)
 app.include_router(routine_router)
 app.include_router(mood_router)
 app.include_router(conversation_router)
+app.include_router(ai_conversation_router)
 app.include_router(message_router)
 app.include_router(collection_router)
 app.include_router(video_router)
