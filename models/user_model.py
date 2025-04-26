@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean,Integer
 from sqlalchemy.dialects.postgresql import UUID  # If using PostgreSQL
 from database.database import Base
 from sqlalchemy.orm import relationship
@@ -19,6 +19,7 @@ class User(Base):
     verification_otp = Column(String(6))
     hashed_password = Column(String)
     is_admin = Column(Boolean, default=False, index=True)
+    score = Column(Integer, default=0)
 
     routines = relationship("Routine", back_populates="user")
     moods = relationship("Mood", back_populates="user")

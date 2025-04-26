@@ -87,7 +87,7 @@ def verify_otp(payload: OTPVerificationRequest, db: Session = Depends(get_db)):
     token = create_access_token(data={"sub": user.id})
 
     print("✅ OTP verified successfully using guardian email!")
-    user_response = UserResponse(id=user.id, username=user.username, email=user.email)
+    user_response = UserResponse(id=user.id, username=user.username, email=user.email,score=user.score) 
 
     return {
         "access_token": token,
@@ -126,7 +126,7 @@ def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
     
     # User is verified, issue token
     token = create_access_token(data={"sub": user.id})
-    user_response = UserResponse(id=user.id, username=user.username, email=user.email)
+    user_response = UserResponse(id=user.id, username=user.username, email=user.email,score=user.score)
 
     return {
         "access_token": token,
