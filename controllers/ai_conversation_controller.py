@@ -9,6 +9,11 @@ from middleware.auth_middleware import get_current_user
 from typing import List
 import openai
 from settings import settings
+from models.user_model import User
+
+from models.emergency_alert_model import EmergencyAlert  # adjust import path
+from datetime import datetime
+from utils.emergency_email_sender import send_email_to_guardian
 
 router = APIRouter(prefix="/aiconversations", tags=["AIConversations"])
 
@@ -128,12 +133,43 @@ def send_message(
         content=response.choices[0].message.content.strip(),
     )
 
+    response_text = response.choices[0].message.content.strip()
+    is_emergency = response_text.endswith("RED")
+
+    if is_emergency:
+        response_text = response_text[:-3].strip()  # Remove "RED"
+        trigger_emergency_protocol(
+            conversation_id=conversation_id,
+            user_id=current_user,
+            db=db,
+            message=message_data.content
+        )
+
+
     db.add(ai_message)
     db.commit()
     db.refresh(ai_message)
 
     return ai_message
 
+
+
+ 
+
+
+def trigger_emergency_protocol(conversation_id: str, user_id: str, db: Session, message: str):
+    # Save to emergency alert log
+    alert = EmergencyAlert(
+        conversation_id=conversation_id,
+        user_id=user_id,
+        message=message,
+        timestamp=datetime.utcnow()
+    )
+    db.add(alert)
+    db.commit()
+    user = db.query(User).filter(User.id == user_id).first()
+    send_email_to_guardian(user.guardianEmail)
+   
 
 # Get all messages in a conversation (only if user owns it)
 @router.get("/{conversation_id}/messages", response_model=List[AiMessageResponse])

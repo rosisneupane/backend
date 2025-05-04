@@ -84,7 +84,7 @@ async def handle_add_video_upload(
         shutil.copyfileobj(file.file, buffer)
 
     # Store local URL path
-    video_url = f"/uploads/{unique_filename}"
+    video_url = f"/uploads/{unique_filename}" 
 
     new_video = Video(title=title, url=video_url, collection_id=collection_id)
     db.add(new_video)

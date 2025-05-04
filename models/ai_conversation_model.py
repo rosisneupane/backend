@@ -10,11 +10,13 @@ class AiConversation(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    name = Column(String, nullable=True)  # Optional conversation title
+    name = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="ai_conversations")
     messages = relationship("AiMessage", back_populates="conversation", cascade="all, delete-orphan")
+    emergency_alerts = relationship("EmergencyAlert", back_populates="conversation", cascade="all, delete-orphan")
+
 
 class AiMessage(Base):
     __tablename__ = "ai_messages"

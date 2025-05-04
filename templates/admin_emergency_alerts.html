@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin - Users</title>
+    <title>Admin - Emergency Alerts</title>
     <style>
         body {
             display: flex;
@@ -48,23 +48,28 @@
             color: #222;
         }
 
-        .user-card {
+        .alert-card {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 15px;
-            max-width: 500px;
+            margin-bottom: 20px;
+            max-width: 700px;
         }
 
-        .user-card p {
-            margin: 6px 0;
-            color: #444;
+        .alert-card h4 {
+            margin: 0 0 10px;
+            color: #c0392b;
         }
 
-        .user-card span {
-            font-weight: bold;
-            color: #222;
+        .alert-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .timestamp {
+            color: #888;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -79,14 +84,17 @@
 </div>
 
 <div class="content">
-    <h2>Users List</h2>
+    <h2>Emergency Alerts</h2>
 
-    {% for user in users %}
-    <div class="user-card">
-        <p><span>Username:</span> {{ user.username }}</p>
-        <p><span>Email:</span> {{ user.email }}</p>
-        <p><span>Admin:</span> {{ user.is_admin }}</p>
-    </div>
+    {% for alert in alerts %}
+        <div class="alert-card">
+            <h4>🚨 Emergency Message</h4>
+            <p><strong>User ID:</strong> {{ alert.user_id }}</p>
+            <p><strong>Message:</strong> {{ alert.message }}</p>
+            <p class="timestamp"><strong>Time:</strong> {{ alert.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
+    {% else %}
+        <p>No emergency alerts found.</p>
     {% endfor %}
 </div>
 

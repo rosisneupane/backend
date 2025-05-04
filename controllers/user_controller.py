@@ -14,6 +14,10 @@ router = APIRouter(prefix="/user", tags=["User"])
 def get_users(current_user: str = Depends(get_current_user),db: Session = Depends(get_db)):
     return db.query(User).filter(User.id != current_user).all()
 
+@router.get("/all", response_model=List[UserResponse])
+def get_all_users(db: Session = Depends(get_db)):
+    return db.query(User).all()
+
 @router.get("/me", response_model=UserResponse)
 def get_user_details(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == current_user).first()
