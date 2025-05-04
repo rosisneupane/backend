@@ -5,6 +5,7 @@ from database.database import get_db
 from models.user_model import User
 from models.emergency_alert_model import EmergencyAlert
 from models.video_model import Collection,Video
+from models.media_model import Media
 from starlette.status import HTTP_302_FOUND
 from fastapi.templating import Jinja2Templates
 from utils.security import verify_password, create_access_token
@@ -71,6 +72,24 @@ async def admin_emergency_alerts(request: Request, db: Session = Depends(get_db)
         "alerts": alerts
     })
 
+@router.get("/media", response_class=HTMLResponse)
+def admin_media_page(request: Request, db: Session = Depends(get_db)):
+    media_items = db.query(Media).all()
+    return templates.TemplateResponse("admin_media.html", {
+        "request": request,
+        "media_items": media_items
+    })
+
+
+CATEGORIES = ["self-care", "wrok", "social", "leisure", "education"]
+
+@router.get("/media/add", response_class=HTMLResponse)
+def show_add_media_form(request: Request):
+    return templates.TemplateResponse("add_media.html", {
+        "request": request,
+        "categories": CATEGORIES
+    })
+
 @router.get("/collections/add", response_class=HTMLResponse)
 async def add_collection_form(request: Request):
     return templates.TemplateResponse("add_collection.html", {"request": request})
@@ -78,5 +97,7 @@ async def add_collection_form(request: Request):
 @router.get("/videos/add", response_class=HTMLResponse)
 async def add_video_form(request: Request, collection_id: UUID = Query(None)):
     return templates.TemplateResponse("add_video.html", {"request": request, "collection_id": collection_id})
+
+
 
 

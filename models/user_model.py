@@ -5,7 +5,7 @@ from database.database import Base
 from sqlalchemy.orm import relationship
 from models.mood_model import Mood
 from models.routine_model import Routine
-from models.pdf_model import Pdf
+from models.media_model import Media
 from models.ai_conversation_model import AiConversation
 from models.emergency_alert_model import EmergencyAlert
 from models.conversation_model import Conversation,Message,conversation_users
@@ -29,7 +29,6 @@ class User(Base):
     conversations = relationship("Conversation", secondary=conversation_users, back_populates="users")
     messages_sent = relationship("Message", back_populates="sender")
     ai_conversations = relationship("AiConversation", back_populates="user")
-    pdfs = relationship("Pdf", back_populates="user")
     emergency_alerts = relationship("EmergencyAlert", back_populates="user")
 
 

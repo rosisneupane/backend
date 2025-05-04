@@ -1,9 +1,12 @@
+# schemas.py or wherever your Pydantic models are
+
 from pydantic import BaseModel
 from uuid import UUID
 
-class PdfMain(BaseModel):
+class MediaOut(BaseModel):
     id: UUID
-    type: str
+    media_type: str
+    category: str
     title: str
     url: str
 

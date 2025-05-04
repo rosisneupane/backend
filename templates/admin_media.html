@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Media Library</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            margin: 8px 0;
+            text-decoration: none;
+            color: #333;
+            background-color: #e4e7eb;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: #cbd3da;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+        }
+
+        .section-title {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #222;
+            font-size: 1.5rem;
+        }
+
+        .media-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .media-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            width: 320px;
+        }
+
+        .media-card video,
+        .media-card iframe {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+        }
+
+        .media-card p {
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        .media-card a {
+            color: #007BFF;
+            text-decoration: underline;
+        }
+
+        .media-card form {
+            margin-top: 10px;
+        }
+
+        .media-card button {
+            padding: 6px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Admin Panel</h3>
+    <a href="/admin/dashboard">Dashboard</a>
+    <a href="/admin/users">Users</a>
+    <a href="/admin/videos">Videos</a>
+    <a href="/admin/emergency-alerts">Emergency Alerts</a>
+    <a href="/admin/media">Media Library</a>
+</div>
+
+<div class="content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Media Collection</h2>
+        <a href="/admin/media/add" style="
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+            + Add Media
+        </a>
+    </div>
+
+    <div class="section-title">PDF Files</div>
+    <div class="media-grid">
+        {% for media in media_items if media.media_type == 'pdf' %}
+        <div class="media-card">
+            <p><strong>{{ media.title }}</strong></p>
+            <a href="{{ media.url }}" target="_blank">View PDF</a>
+            <form method="post" action="/media/delete/{{ media.id }}" onsubmit="return confirm('Delete this PDF?')">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="section-title">Videos</div>
+    <div class="media-grid">
+        {% for media in media_items if media.media_type == 'video' %}
+        <div class="media-card">
+            <video controls>
+                <source src="{{ media.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p><strong>{{ media.title }}</strong></p>
+            <form method="post" action="/media/delete/{{ media.id }}" onsubmit="return confirm('Delete this video?')">
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
