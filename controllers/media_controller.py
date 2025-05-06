@@ -68,13 +68,12 @@ def get_media_by_type_and_category(
         .all()
     )
 
-@router.delete("/{media_id}")
+@router.post("/delete/{media_id}")
 def delete_media(
     media_id: UUID,
     db: Session = Depends(get_db),
-    current_user: str = Depends(get_current_user),
 ):
-    media = db.query(Media).filter(Media.id == media_id, Media.user_id == current_user).first()
+    media = db.query(Media).filter(Media.id == media_id).first()
     if not media:
         raise HTTPException(status_code=404, detail="Media not found")
 

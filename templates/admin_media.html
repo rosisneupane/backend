@@ -145,7 +145,6 @@
                 Your browser does not support the video tag.
             </video>
             <p><strong>{{ media.title }}</strong></p>
-            <p><strong>{{ media.category }}</strong></p>
             <form method="post" action="/media/delete/{{ media.id }}" onsubmit="return confirm('Delete this video?')">
                 <button type="submit">Delete</button>
             </form>
