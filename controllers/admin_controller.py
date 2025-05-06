@@ -81,7 +81,7 @@ def admin_media_page(request: Request, db: Session = Depends(get_db)):
     })
 
 
-CATEGORIES = ["self-care", "wrok", "social", "leisure", "education"]
+CATEGORIES = ["self-care", "work", "social", "leisure", "education"]
 
 @router.get("/media/add", response_class=HTMLResponse)
 def show_add_media_form(request: Request):

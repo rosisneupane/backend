@@ -56,14 +56,15 @@ def upload_media(
 
 
 @router.get("/", response_model=List[MediaOut])
-def get_media_by_type(
+def get_media_by_type_and_category(
     media_type: str = Query(..., regex="^(pdf|video)$"),
+    category: str = Query(...),
     db: Session = Depends(get_db),
     current_user: str = Depends(get_current_user),
 ):
     return (
         db.query(Media)
-        .filter(Media.media_type == media_type)
+        .filter(Media.media_type == media_type, Media.category == category)
         .all()
     )
 
