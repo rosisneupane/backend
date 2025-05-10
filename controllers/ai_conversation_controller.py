@@ -153,10 +153,6 @@ def send_message(
     return ai_message
 
 
-
- 
-
-
 def trigger_emergency_protocol(conversation_id: str, user_id: str, db: Session, message: str):
     # Save to emergency alert log
     alert = EmergencyAlert(
