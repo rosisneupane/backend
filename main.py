@@ -10,6 +10,7 @@ from controllers.user_controller import router as user_router
 from controllers.video_controller import router as video_router
 from controllers.collection_controller import router as collection_router
 from controllers.media_controller import router as pdf_router
+from controllers.event_controller import router as event_router
 from database.database import Base, engine
 from fastapi.staticfiles import StaticFiles
 import os
@@ -46,4 +47,5 @@ app.include_router(message_router)
 app.include_router(collection_router)
 app.include_router(video_router)
 app.include_router(pdf_router)
+app.include_router(event_router)
 app.include_router(admin_router)  # Admin route

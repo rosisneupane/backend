@@ -5,6 +5,7 @@ from database.database import get_db
 from models.user_model import User
 from models.emergency_alert_model import EmergencyAlert
 from models.video_model import Collection,Video
+from models.event_model import Event
 from models.media_model import Media
 from starlette.status import HTTP_302_FOUND
 from fastapi.templating import Jinja2Templates
@@ -101,3 +102,16 @@ async def add_video_form(request: Request, collection_id: UUID = Query(None)):
 
 
 
+@router.get("/events", response_class=HTMLResponse)
+def admin_media_page(request: Request, db: Session = Depends(get_db)):
+    events = db.query(Event).all()
+    return templates.TemplateResponse("event.html", {
+        "request": request,
+        "events": events
+    })
+
+@router.get("/events/add", response_class=HTMLResponse)
+def show_add_media_form(request: Request):
+    return templates.TemplateResponse("add_event.html", {
+        "request": request
+    })
