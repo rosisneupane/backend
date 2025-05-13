@@ -14,7 +14,7 @@ This project is a FastAPI-based API for user registration, login, and OTP-based 
 
 ## 🔧 Setup and Installation
 
-Follow these steps to get the project up and running locally
+Follow these steps to get the project up and running locally.
 
 Create a Virtual Environment
 Using venv to manage dependencies.
