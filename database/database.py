@@ -2,16 +2,19 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "sqlite:///./users.db"  # SQLite DB file
+#DATABASE_URL = "sqlite:///./users.db"  # SQLite DB file
+DATABASE_URL = "postgresql://rosis_user:cUz4yEFUpVq58ayqW3oItSatxwVX1A60@dpg-d0hg6ebuibrs739na3hg-a.oregon-postgres.render.com/rosis"
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
+engine = create_engine(DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
 def get_db():
     db = SessionLocal()
-    try:
+    try: 
         yield db
     finally:
         db.close()

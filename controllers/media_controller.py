@@ -9,38 +9,47 @@ from middleware.auth_middleware import get_current_user
 from typing import List
 from fastapi.responses import RedirectResponse
 import shutil
+import cloudinary.uploader
 
 router = APIRouter(prefix="/media", tags=["Media"])
 
-
 @router.post("/upload")
 def upload_media(
-    category: str = Form(...),    # e.g., 'self-help', 'meditation'
+    category: str = Form(...),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ):
-    # Extract and clean title from filename
+    # Extract and clean title
     original_filename = file.filename
     title = original_filename.rsplit(".", 1)[0].replace("_", " ").replace("-", " ").strip()
 
-    # Infer media_type from file extension
+    # Determine media type
     extension = original_filename.rsplit(".", 1)[-1].lower()
     if extension in ["pdf"]:
         media_type = "pdf"
+        resource_type = "raw"
     elif extension in ["mp4", "mov", "avi", "mkv"]:
         media_type = "video"
+        resource_type = "video"
     else:
         raise HTTPException(status_code=400, detail="Unsupported file type")
 
-    # Save file to local storage
-    file_location = f"uploads/{original_filename}"
-    with open(file_location, "wb") as f:
-        shutil.copyfileobj(file.file, f)
+    # Upload to Cloudinary
+    try:
+        result = cloudinary.uploader.upload(
+            file.file,
+            resource_type=resource_type,
+            folder=f"{category}/",
+            public_id=title,
+            use_filename=True,
+            unique_filename=False,
+            overwrite=True
+        )
+        file_url = result["secure_url"]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Upload to Cloudinary failed: {str(e)}")
 
-    # Create URL path for stored file
-    file_url = f"/uploads/{original_filename}"
-
-    # Create and save Media entry
+    # Save media info to DB
     new_media = Media(
         media_type=media_type,
         category=category,
@@ -52,6 +61,47 @@ def upload_media(
     db.refresh(new_media)
 
     return RedirectResponse(url="/admin/media", status_code=303)
+
+
+# @router.post("/upload") 
+# def upload_media(
+#     category: str = Form(...),    # e.g., 'self-help', 'meditation'
+#     file: UploadFile = File(...),
+#     db: Session = Depends(get_db),
+# ):
+#     # Extract and clean title from filename
+#     original_filename = file.filename
+#     title = original_filename.rsplit(".", 1)[0].replace("_", " ").replace("-", " ").strip()
+
+#     # Infer media_type from file extension
+#     extension = original_filename.rsplit(".", 1)[-1].lower()
+#     if extension in ["pdf"]:
+#         media_type = "pdf"
+#     elif extension in ["mp4", "mov", "avi", "mkv"]:
+#         media_type = "video"
+#     else:
+#         raise HTTPException(status_code=400, detail="Unsupported file type")
+
+#     # Save file to local storage
+#     file_location = f"uploads/{original_filename}"
+#     with open(file_location, "wb") as f:
+#         shutil.copyfileobj(file.file, f)
+
+#     # Create URL path for stored file
+#     file_url = f"/uploads/{original_filename}"
+
+#     # Create and save Media entry
+#     new_media = Media(
+#         media_type=media_type,
+#         category=category,
+#         title=title,
+#         url=file_url,
+#     )
+#     db.add(new_media)
+#     db.commit()
+#     db.refresh(new_media)
+
+#     return RedirectResponse(url="/admin/media", status_code=303)
 
 
 

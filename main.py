@@ -14,6 +14,14 @@ from controllers.event_controller import router as event_router
 from database.database import Base, engine
 from fastapi.staticfiles import StaticFiles
 import os
+import cloudinary
+import cloudinary.uploader
+
+cloudinary.config(
+    cloud_name="dqlba0s8j",
+    api_key="963721232975944",
+    api_secret="tFIbgxfmzyg0NGgUq_AHKFOxY-I"
+)
 
 
 
