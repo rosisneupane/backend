@@ -23,6 +23,7 @@ class User(Base):
     hashed_password = Column(String)
     is_admin = Column(Boolean, default=False, index=True)
     score = Column(Integer, default=0)
+    profile_picture = Column(String, nullable=True)
 
     routines = relationship("Routine", back_populates="user")
     moods = relationship("Mood", back_populates="user")
