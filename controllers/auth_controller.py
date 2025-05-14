@@ -126,7 +126,7 @@ def login_user(credentials: LoginRequest, db: Session = Depends(get_db)):
     
     # User is verified, issue token
     token = create_access_token(data={"sub": user.id})
-    user_response = UserResponse(id=user.id, username=user.username, email=user.email,score=user.score)
+    user_response = UserResponse(id=user.id, username=user.username, email=user.email,score=user.score,profile_picture=user.profile_picture)
 
     return {
         "access_token": token,
