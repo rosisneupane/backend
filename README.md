@@ -1,35 +1,64 @@
-# FastAPI User Authentication API
+# 🧠 MultiCoached Backend
 
-This project is a FastAPI-based API for user registration, login, and OTP-based email verification. It includes routes for registering users, verifying OTPs, and authenticating via JWT tokens.
-
-## Features
-
-- User Registration with email OTP verification
-- JWT-based authentication
-- Secure password hashing (bcrypt)
-- SQLAlchemy ORM for database interactions
-- Email service integration for OTP delivery
+This is the backend system for the MultiCoached mobile mental health application. Built using FastAPI and SQLAlchemy, it handles all core logic, authentication, chatbot processing, mood tracking, resource management, and forum features.
 
 ---
 
-## 🔧 Setup and Installation
+## 🚀 Features
 
-Follow these steps to get the project up and running locally.
+- User registration and JWT-based authentication
+- OTP verification (simulated)
+- Daily mood check-in and tracking
+- GPT-powered chatbot with distress signal alerts
+- Admin panel for managing resources (PDFs, videos)
+- Discussion forum and peer chat backend
+- Swagger API documentation
 
-Create a Virtual Environment
-Using venv to manage dependencies.
+---
 
-On Linux / MacOS:
-python3 -m venv venv
-source venv/bin/activate
+## 🛠️ Tech Stack
 
-On Windows:
-python -m venv venv
-venv\Scripts\activate
+- FastAPI
+- Python 3.11+
+- SQLAlchemy ORM
+- SQLite
+- Uvicorn
+- Pydantic
+- OpenAI API (Chatbot)
+- SMTP for email alerts
 
-3️⃣ Install Dependencies
-Make sure you have a requirements.txt file, then run:
-pip install -r requirements.txt
+---
 
-4️⃣ Run the FastAPI Applicatio
-uvicorn main:app --reload
+## 🏗️ Setup Instructions
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rosisneupane/backend
+   cd backend
+2️ **Create Virtual Environment**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+3️.**Install Dependencies**
+    ```bash
+    pip install -r requirements.txt
+    
+4️ **Run the Server**
+    ```bash  
+    uvicorn main:app --reload
+Swagger docs: http://localhost:8000/docs
+
+## 💡 Distress Detection Logic
+The chatbot monitors user messages. If certain keywords (e.g., "hurt", "die", "alone") are detected:
+A distress signal is triggered.
+An email alert is automatically sent to the guardian’s registered email.
+
+## 🗄️ Database Info
+Database: SQLite (auto-generated app.db)
+
+ORM: SQLAlchemy
+
+Models: User, DailyCheckIn, ChatLog, Resources, etc.
+
+
